@@ -4,6 +4,13 @@
  */
 package com.mycompany.visao.cidade;
 
+import com.mycompany.dao.DaoCidade;
+import com.mycompany.dao.DaoEstado;
+import com.mycompany.ferramentas.DadosTemporarios;
+import com.mycompany.modelo.ModCidade;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author arthur.7923
@@ -15,6 +22,109 @@ public class ListCidade extends javax.swing.JFrame {
      */
     public ListCidade() {
         initComponents();
+        
+        setLocationRelativeTo(null);
+        
+        listarTodos();
+    }
+    public void listarTodos(){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
+            
+            tableCidade.setModel(defaultTableModel);
+            
+            DaoCidade daoCidade = new DaoCidade();
+            
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoCidade.listarTodos();
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String id_estado = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[] {id, id_estado, nome});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listarPorId(int pId){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
+
+            tableCidade.setModel(defaultTableModel);
+
+            DaoCidade daoCidade = new DaoCidade();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoCidade.listarPorId(pId);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String id_estado = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[]{id, id_estado, nome});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listarPorNome(String pNome){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
+            
+            tableCidade.setModel(defaultTableModel);
+
+            DaoCidade daoCidade = new DaoCidade();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoCidade.listarPorNome(pNome);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String id_estado = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[]{id, id_estado, nome});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listarPorId_estado(String Id_estado){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
+            
+            tableCidade.setModel(defaultTableModel);
+
+            DaoCidade DaoCidade = new DaoCidade();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = DaoCidade.listarPorId_estado(Id_estado);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String id_estado = resultSet.getString(2);
+                String cidade = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[]{id, id_estado, cidade});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -33,7 +143,7 @@ public class ListCidade extends javax.swing.JFrame {
         tableCidade = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "ID_ESTADO", "CIDADE" }));
 
@@ -53,9 +163,19 @@ public class ListCidade extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tableCidade.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableCidadeMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableCidade);
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -109,6 +229,50 @@ public class ListCidade extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        switch (jcbTipoFiltro.getSelectedIndex()){
+            case 0:
+                listarTodos();
+                break;
+            case 1:
+                listarPorId(Integer.parseInt(tfFiltro.getText()));
+                break;
+            case 2:
+                listarPorId_estado(tfFiltro.getText());
+                break;
+            case 3:
+                listarPorNome(tfFiltro.getText());
+                break;
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void tableCidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCidadeMouseClicked
+        try{
+            if (evt.getClickCount() == 2){
+                ModCidade modCidade = new ModCidade();
+
+                modCidade.setId(Integer.parseInt(String.valueOf(tableCidade.getValueAt(tableCidade.getSelectedRow(), 0))));
+                modCidade.setNome(String.valueOf(tableCidade.getValueAt(tableCidade.getSelectedRow(), 2)));
+
+                DaoEstado daoEstado = new DaoEstado();
+                ResultSet resultSet = daoEstado.listarPorNome(String.valueOf(tableCidade.getValueAt(tableCidade.getSelectedRow(), 1)));
+
+                int idEstado = -1;
+                while(resultSet.next())
+                    idEstado = resultSet.getInt("ID");
+
+                modCidade.setId_estado(idEstado);
+                
+                DadosTemporarios.tempObject = (ModCidade) modCidade;
+
+                CadCidade cadCidade = new CadCidade();
+                cadCidade.setVisible(true);
+            }
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }
+    }//GEN-LAST:event_tableCidadeMouseClicked
 
     /**
      * @param args the command line arguments

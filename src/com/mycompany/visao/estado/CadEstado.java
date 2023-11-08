@@ -4,6 +4,14 @@
  */
 package com.mycompany.visao.estado;
 
+import com.mycompany.dao.DaoEstado;
+import com.mycompany.ferramentas.Constantes;
+import com.mycompany.ferramentas.DadosTemporarios;
+import com.mycompany.ferramentas.Formularios;
+import com.mycompany.modelo.ModEstado;
+import com.mycompany.visao.cidade.CadCidade;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author arthur.7923
@@ -15,6 +23,92 @@ public class CadEstado extends javax.swing.JFrame {
      */
     public CadEstado() {
         initComponents();
+        
+        if(!existeDadosTemporarios()){
+            DaoEstado daoEstado = new DaoEstado();
+
+            int id = daoEstado.buscarProximoId(); 
+            if (id > 0)
+                tfId.setText(String.valueOf(id));
+            
+            btnAcao.setText(Constantes.BTN_SALVAR_TEXT);
+            btnExcluir.setVisible(false);
+        }else{
+            btnAcao.setText(Constantes.BTN_ALTERAR_TEXT);
+            btnExcluir.setVisible(true);
+        }
+
+        setLocationRelativeTo(null);
+        
+        tfId.setEnabled(false);
+
+    }
+    
+    private Boolean existeDadosTemporarios(){        
+        if(DadosTemporarios.tempObject instanceof ModEstado modEstado){
+            int id = modEstado.getId();
+            String nome = modEstado.getNome();
+            String uf = modEstado.getUf();
+            
+            tfId.setText(String.valueOf(id));
+            tfNome.setText(nome);
+            tfUf.setText(uf);
+
+            DadosTemporarios.tempObject = null;
+            
+            return true;
+        }else
+            return false;
+    }
+
+    private void inserir(){
+        DaoEstado daoEstado = new DaoEstado();
+        
+        if (daoEstado.inserir(Integer.parseInt(tfId.getText()), tfNome.getText(), tfUf.getText())){
+            JOptionPane.showMessageDialog(null, "Estado salvo com sucesso!");
+            
+            tfId.setText(String.valueOf(daoEstado.buscarProximoId()));
+            tfNome.setText("");
+            tfUf.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível salvar o estado!");
+        }
+    }
+    
+    private void alterar(){
+        DaoEstado daoEstado = new DaoEstado();
+        
+        if (daoEstado.alterar(Integer.parseInt(tfId.getText()), tfNome.getText(), tfUf.getText())){
+            JOptionPane.showMessageDialog(null, "Estado alterada com sucesso!");
+            
+            tfId.setText("");
+            tfNome.setText("");
+            tfUf.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar o estado!");
+        }
+        
+        ((ListEstado) Formularios.listEstado).listarTodos();
+        
+        dispose();
+    }
+    
+    private void excluir(){
+        DaoEstado daoEstado = new DaoEstado();
+        
+        if (daoEstado.excluir(Integer.parseInt(tfId.getText()))){
+            JOptionPane.showMessageDialog(null, "Estado " + tfNome.getText() + " excluída com sucesso!");
+            
+            tfId.setText("");
+            tfNome.setText("");
+            tfUf.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível excluir o estado!");
+        }
+        
+        ((ListEstado) Formularios.listEstado).listarTodos();
+        
+        dispose();
     }
 
     /**
@@ -36,7 +130,7 @@ public class CadEstado extends javax.swing.JFrame {
         btnAcao = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID");
 
@@ -45,8 +139,18 @@ public class CadEstado extends javax.swing.JFrame {
         jLabel3.setText("UF");
 
         btnAcao.setText("Salvar");
+        btnAcao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcaoActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -55,16 +159,17 @@ public class CadEstado extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAcao)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnExcluir))
-                    .addComponent(tfUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(tfNome, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAcao)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExcluir))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(tfUf)
+                        .addComponent(tfNome, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
                 .addContainerGap(203, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -108,6 +213,28 @@ public class CadEstado extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAcaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcaoActionPerformed
+        if (btnAcao.getText() == Constantes.BTN_SALVAR_TEXT){
+            inserir();
+            
+            if(Formularios.cadCidade != null){
+                ((CadCidade) Formularios.cadCidade).carregarEstados();
+                dispose();
+            }
+        }else if (btnAcao.getText() == Constantes.BTN_ALTERAR_TEXT)
+            alterar();
+    }//GEN-LAST:event_btnAcaoActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int escolha = 
+                JOptionPane.showConfirmDialog(
+                        null, 
+                        "Deseja realmente excluir o estado " + tfNome.getText() + "?");
+        
+        if(escolha == JOptionPane.YES_OPTION)
+            excluir();
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments

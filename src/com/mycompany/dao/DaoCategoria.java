@@ -17,7 +17,7 @@ public class DaoCategoria extends BancoDeDadosMySql{
     
     public Boolean inserir(int id, String nome, String descricao){
         try{
-            sql= "INSERT INTO CATEGORIA (ID, NOME, DESCRICAO) VALUES (?, ?, ?)";
+            sql = "INSERT INTO CATEGORIA (ID, NOME, DESCRICAO) VALUES (?, ?, ?)";
             
             setStatement(getConexao().prepareStatement(sql));
             
@@ -25,15 +25,16 @@ public class DaoCategoria extends BancoDeDadosMySql{
             getStatement().setString(2, nome);
             getStatement().setString(3, descricao);
             
+            getStatement().executeUpdate();
+            
             return true;
         }catch(Exception e){
             System.out.println(e.getMessage());
             return false;
-            
         }
     }
     
-    public Boolean alterar(int id, String novoNome, String novaDescricao) {
+    public Boolean alterar(int id, String novoNome, String novaDescricao){
         try{
             sql = "UPDATE CATEGORIA SET NOME = ?, DESCRICAO = ? WHERE ID = ?";
             
@@ -49,12 +50,10 @@ public class DaoCategoria extends BancoDeDadosMySql{
         }catch(Exception e){
             System.out.println(e.getMessage());
             return false;
-            
         }
     }
     
-    public Boolean excluir (int id) {
-        
+    public Boolean excluir(int id){
         try{
             sql = "DELETE FROM CATEGORIA WHERE ID = ?";
             
@@ -69,7 +68,6 @@ public class DaoCategoria extends BancoDeDadosMySql{
             System.out.println(e.getMessage());
             return false;
         }
-        
     }
     
     public ResultSet listarTodos(){
@@ -86,12 +84,13 @@ public class DaoCategoria extends BancoDeDadosMySql{
         return getResultado();
     }
     
-    
     public ResultSet listarPorId(int id){
         try{
             sql = "SELECT ID, NOME, IFNULL(DESCRICAO, '') FROM CATEGORIA WHERE ID = ?";
             
             setStatement(getConexao().prepareStatement(sql));
+            
+            getStatement().setInt(1, id);
             
             setResultado(getStatement().executeQuery());
         }catch(Exception e){
@@ -99,12 +98,11 @@ public class DaoCategoria extends BancoDeDadosMySql{
         }
         
         return getResultado();
-        
     }
     
-    public ResultSet listarPorNome (String nome){
+    public ResultSet listarPorNome(String nome){
         try{
-            sql = "SELECT ID, NOME, IFNULL(DESCRICAO, '') FROM CATEGORIA WHERE NOME = ?";
+            sql = "SELECT ID, NOME, IFNULL(DESCRICAO, '') FROM CATEGORIA WHERE NOME LIKE ?";
             
             setStatement(getConexao().prepareStatement(sql));
             
@@ -113,16 +111,14 @@ public class DaoCategoria extends BancoDeDadosMySql{
             setResultado(getStatement().executeQuery());
         }catch(Exception e){
             System.out.println(e.getMessage());
-            
         }
         
         return getResultado();
-        
     }
     
-    public ResultSet listarPorDescricao (String descricao) {
+    public ResultSet listarPorDescricao(String descricao){
         try{
-            sql = "SELECT ID, NOME, IFNULL(DESCRICAO, '') FROM CATEGORIA WHERE DESCRICAO = ?";
+            sql = "SELECT ID, NOME, IFNULL(DESCRICAO, '') FROM CATEGORIA WHERE DESCRICAO LIKE ?";
             
             setStatement(getConexao().prepareStatement(sql));
             
@@ -134,27 +130,25 @@ public class DaoCategoria extends BancoDeDadosMySql{
         }
         
         return getResultado();
-        
     }
     
     public int buscarProximoId(){
-        int id = -1;
+        int id = 0;
         
         try{
-            sql = "SELECT MAX(ID) + 1 FROM CATEGORIA";
+            sql = "SELECT IFNULL(MAX(ID), 0) + 1 FROM CATEGORIA";
             
             setStatement(getConexao().prepareStatement(sql));
             
             setResultado(getStatement().executeQuery());
             
-            getResultado().next();
+            getResultado().next(); //Move para o primeiro registro.
             
-            id = getResultado().getInt(1);
+            id = getResultado().getInt(1); //Pega o valor retornado na consulta
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
         
         return id;
-        
     }
 }

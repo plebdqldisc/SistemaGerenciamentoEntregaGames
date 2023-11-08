@@ -53,18 +53,14 @@ public class ListCategoria extends javax.swing.JFrame {
     
     public void listarPorId(int pId){
         try{
-           
-            DefaultTableModel defaultTableModel = new DefaultTableModel();
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCategoria.getModel();
 
-            defaultTableModel.addColumn("ID");
-            defaultTableModel.addColumn("NOME");
-            defaultTableModel.addColumn("DESCRIÇÃO");
-            
             tableCategoria.setModel(defaultTableModel);
 
             DaoCategoria daoCategoria = new DaoCategoria();
 
-            
+            //Atribui o resultset retornado a uma variável para ser usada.
             ResultSet resultSet = daoCategoria.listarPorId(pId);
             
             defaultTableModel.setRowCount(0);
@@ -82,18 +78,14 @@ public class ListCategoria extends javax.swing.JFrame {
     
     public void listarPorNome(String pNome){
         try{
-            
-            DefaultTableModel defaultTableModel = new DefaultTableModel();
-
-            defaultTableModel.addColumn("ID");
-            defaultTableModel.addColumn("NOME");
-            defaultTableModel.addColumn("DESCRIÇÃO");
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCategoria.getModel();
             
             tableCategoria.setModel(defaultTableModel);
 
             DaoCategoria daoCategoria = new DaoCategoria();
 
-            
+            //Atribui o resultset retornado a uma variável para ser usada.
             ResultSet resultSet = daoCategoria.listarPorNome(pNome);
             
             defaultTableModel.setRowCount(0);
@@ -111,18 +103,14 @@ public class ListCategoria extends javax.swing.JFrame {
     
     public void listarPorDescricao(String pDescricao){
         try{
-       
-            DefaultTableModel defaultTableModel = new DefaultTableModel();
-
-            defaultTableModel.addColumn("ID");
-            defaultTableModel.addColumn("NOME");
-            defaultTableModel.addColumn("DESCRIÇÃO");
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCategoria.getModel();
             
             tableCategoria.setModel(defaultTableModel);
 
             DaoCategoria daoCategoria = new DaoCategoria();
 
-            
+            //Atribui o resultset retornado a uma variável para ser usada.
             ResultSet resultSet = daoCategoria.listarPorDescricao(pDescricao);
             
             defaultTableModel.setRowCount(0);
@@ -154,7 +142,7 @@ public class ListCategoria extends javax.swing.JFrame {
         tableCategoria = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "DESCRICAO", "NOME" }));
 
@@ -165,7 +153,15 @@ public class ListCategoria extends javax.swing.JFrame {
             new String [] {
                 "ID", "Descricao", "Nome"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tableCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableCategoriaMouseClicked(evt);

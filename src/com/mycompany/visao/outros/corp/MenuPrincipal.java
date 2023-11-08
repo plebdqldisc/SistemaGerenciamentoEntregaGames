@@ -8,6 +8,10 @@ import com.mycompany.ferramentas.BancoDeDadosMySql;
 import com.mycompany.ferramentas.Formularios;
 import com.mycompany.visao.categoria.CadCategoria;
 import com.mycompany.visao.categoria.ListCategoria;
+import com.mycompany.visao.cidade.CadCidade;
+import com.mycompany.visao.cidade.ListCidade;
+import com.mycompany.visao.estado.CadEstado;
+import com.mycompany.visao.estado.ListEstado;
 import javax.swing.JOptionPane;
 
 /**
@@ -46,8 +50,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         miCadastroCategoria = new javax.swing.JMenuItem();
+        miCadastroCidade = new javax.swing.JMenuItem();
+        miCadastroEstado = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miConsultaCategoria = new javax.swing.JMenuItem();
+        miConsultaCidade = new javax.swing.JMenuItem();
+        miConsultaEstado = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +80,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(miCadastroCategoria);
 
+        miCadastroCidade.setText("Cidade");
+        miCadastroCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCadastroCidadeActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miCadastroCidade);
+
+        miCadastroEstado.setText("Estado");
+        miCadastroEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCadastroEstadoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miCadastroEstado);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Consulta");
@@ -83,6 +107,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu2.add(miConsultaCategoria);
+
+        miConsultaCidade.setText("Cidade");
+        miConsultaCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miConsultaCidadeActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miConsultaCidade);
+
+        miConsultaEstado.setText("Estado");
+        miConsultaEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miConsultaEstadoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miConsultaEstado);
 
         jMenuBar1.add(jMenu2);
 
@@ -113,6 +153,30 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Formularios.listCategoria = new ListCategoria();
         Formularios.listCategoria.setVisible(true);
     }//GEN-LAST:event_miConsultaCategoriaActionPerformed
+
+    private void miConsultaEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miConsultaEstadoActionPerformed
+        Formularios.listEstado = new ListEstado();
+        Formularios.listEstado.setVisible(true);
+    }//GEN-LAST:event_miConsultaEstadoActionPerformed
+
+    private void miCadastroCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadastroCidadeActionPerformed
+        if(Formularios.cadCidade == null)
+            Formularios.cadCidade = new CadCidade();
+        
+        Formularios.cadCidade.setVisible(true);
+    }//GEN-LAST:event_miCadastroCidadeActionPerformed
+
+    private void miCadastroEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadastroEstadoActionPerformed
+        if(Formularios.cadEstado == null)
+            Formularios.cadEstado = new CadEstado();
+        
+        Formularios.cadEstado.setVisible(true);
+    }//GEN-LAST:event_miCadastroEstadoActionPerformed
+
+    private void miConsultaCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miConsultaCidadeActionPerformed
+        Formularios.listCidade = new ListCidade();
+        Formularios.listCidade.setVisible(true);
+    }//GEN-LAST:event_miConsultaCidadeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,6 +220,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem miCadastroCategoria;
+    private javax.swing.JMenuItem miCadastroCidade;
+    private javax.swing.JMenuItem miCadastroEstado;
     private javax.swing.JMenuItem miConsultaCategoria;
+    private javax.swing.JMenuItem miConsultaCidade;
+    private javax.swing.JMenuItem miConsultaEstado;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,11 @@
  */
 package com.mycompany.visao.estado;
 
+import com.mycompany.dao.DaoEstado;
+import com.mycompany.ferramentas.DadosTemporarios;
+import com.mycompany.modelo.ModEstado;
+import javax.swing.table.DefaultTableModel;
+import java.sql.ResultSet;
 /**
  *
  * @author arthur.7923
@@ -15,8 +20,114 @@ public class ListEstado extends javax.swing.JFrame {
      */
     public ListEstado() {
         initComponents();
+        
+        setLocationRelativeTo(null);
+        
+        listarTodos();
     }
 
+    public void listarTodos(){
+        try{
+            //Pega o model da tabela definido no design
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
+            
+            tableEstado.setModel(defaultTableModel);
+
+            DaoEstado daoEstado = new DaoEstado();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoEstado.listarTodos();
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                String uf =  resultSet.getString(3);
+
+                defaultTableModel.addRow(new Object[]{id, nome, uf});
+            }
+        }catch(Exception e){
+            
+        }
+    }
+    
+    public void listarPorId(int pId){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
+
+            tableEstado.setModel(defaultTableModel);
+
+            DaoEstado daoEstado = new DaoEstado();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoEstado.listarPorId(pId);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+    String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                String uf =  resultSet.getString(3);
+
+                defaultTableModel.addRow(new Object[]{id, nome, uf});
+            }
+        }catch(Exception e){
+            
+        }
+    }
+    
+    public void listarPorNome(String pNome){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
+            
+            tableEstado.setModel(defaultTableModel);
+
+            DaoEstado daoEstado = new DaoEstado();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoEstado.listarPorNome(pNome);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                String uf = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[]{id, nome, uf});
+                
+            }
+        }catch(Exception e){
+            
+        }
+    }        
+    
+    public void listarPorUf(String pUf){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
+            
+            tableEstado.setModel(defaultTableModel);
+
+            DaoEstado daoEstado = new DaoEstado();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoEstado.listarPorUf(pUf);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                String uf = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[] {id, nome, uf});
+                
+            }
+        }catch(Exception e) {
+            
+        }
+    }
+                
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,7 +144,7 @@ public class ListEstado extends javax.swing.JFrame {
         tableEstado = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "ESTADO", "UF" }));
 
@@ -53,9 +164,19 @@ public class ListEstado extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tableEstado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableEstadoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableEstado);
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -109,6 +230,42 @@ public class ListEstado extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tableEstadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEstadoMouseClicked
+        try{
+            if (evt.getClickCount() == 2){
+                ModEstado modEstado = new ModEstado();
+
+                modEstado.setId(Integer.parseInt(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 0))));
+                modEstado.setNome(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 2)));
+                modEstado.setUf(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 3)));
+
+                DadosTemporarios.tempObject = (ModEstado) modEstado;
+
+                CadEstado cadEstado = new CadEstado();
+                cadEstado.setVisible(true);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_tableEstadoMouseClicked
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+       switch (jcbTipoFiltro.getSelectedIndex()){
+            case 0:
+                listarTodos();
+                break;
+            case 1:
+                listarPorId(Integer.parseInt(tfFiltro.getText()));
+                break;
+            case 2:
+                listarPorNome(tfFiltro.getText());
+                break;
+            case 3:
+                listarPorUf(tfFiltro.getText());
+                break;
+       }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments

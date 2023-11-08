@@ -119,35 +119,6 @@ public class DaoCidade extends BancoDeDadosMySql{
         
     }
     
-    public ResultSet listarPorId_estado (String id_estado) {
-        try{
-            sql = 
-                    
-                  " SELECT                       "+ 
-                  "     CID.ID AS ID,            "+
-                  "     EST.NOME AS ESTADO,      "+
-                  "     CID.NOME AS CIDADE,      "+
-                  "     EST.UF                   "+
-                  " FROM                         "+
-                  "    CIDADE CID                "+
-                  " JOIN ESTADO EST ON           "+
-                  "     EST.ID = CID.ID_ESTADO   "+
-                  " WHERE                        "+
-                  "     EST.NOME LIKE ?          ";
-            
-            setStatement(getConexao().prepareStatement(sql));
-            
-            getStatement().setString(1, id_estado + "%");
-            
-            setResultado(getStatement().executeQuery());
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        
-        return getResultado();
-        
-    }
-    
     public ResultSet listarPorNome (String nome){
         try{
             sql = 
@@ -173,6 +144,35 @@ public class DaoCidade extends BancoDeDadosMySql{
         }catch(Exception e){
             System.out.println(e.getMessage());
             
+        }
+        
+        return getResultado();
+        
+    }
+    
+    public ResultSet listarPorId_estado (String Id_estado) {
+        try{
+            sql = 
+                    
+                  " SELECT                       "+ 
+                  "     CID.ID AS ID,            "+
+                  "     EST.NOME AS ESTADO,      "+
+                  "     CID.NOME AS CIDADE,      "+
+                  "     EST.UF                   "+
+                  " FROM                         "+
+                  "    CIDADE CID                "+
+                  " JOIN ESTADO EST ON           "+
+                  "     EST.ID = CID.ID_ESTADO   "+
+                  " WHERE                        "+
+                  "     EST.NOME LIKE ?          ";
+            
+            setStatement(getConexao().prepareStatement(sql));
+            
+            getStatement().setString(1, Id_estado + "%");
+            
+            setResultado(getStatement().executeQuery());
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
         
         return getResultado();

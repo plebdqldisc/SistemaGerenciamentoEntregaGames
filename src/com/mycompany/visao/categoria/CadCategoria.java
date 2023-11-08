@@ -60,6 +60,56 @@ public class CadCategoria extends javax.swing.JFrame {
         }else
             return false;
     }
+    
+    private void inserir(){
+        DaoCategoria daoCategoria = new DaoCategoria();
+        
+        if (daoCategoria.inserir(Integer.parseInt(tfId.getText()), tfNome.getText(), tfDescricao.getText())){
+            JOptionPane.showMessageDialog(null, "Categoria salva com sucesso!");
+            
+            tfId.setText(String.valueOf(daoCategoria.buscarProximoId()));
+            tfNome.setText("");
+            tfDescricao.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível salvar a categoria!");
+        }
+    }
+    
+    private void alterar(){
+        DaoCategoria daoCategoria = new DaoCategoria();
+        
+        if (daoCategoria.alterar(Integer.parseInt(tfId.getText()), tfNome.getText(), tfDescricao.getText())){
+            JOptionPane.showMessageDialog(null, "Categoria alterada com sucesso!");
+            
+            tfId.setText("");
+            tfNome.setText("");
+            tfDescricao.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar a categoria!");
+        }
+        
+        ((ListCategoria) Formularios.listCategoria).listarTodos();
+        
+        dispose();
+    }
+    
+    private void excluir(){
+        DaoCategoria daoCategoria = new DaoCategoria();
+        
+        if (daoCategoria.excluir(Integer.parseInt(tfId.getText()))){
+            JOptionPane.showMessageDialog(null, "Categoria " + tfNome.getText() + " excluída com sucesso!");
+            
+            tfId.setText("");
+            tfNome.setText("");
+            tfDescricao.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível excluir a categoria!");
+        }
+        
+        ((ListCategoria) Formularios.listCategoria).listarTodos();
+        
+        dispose();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,7 +130,7 @@ public class CadCategoria extends javax.swing.JFrame {
         btnAcao = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID");
 
@@ -164,10 +214,20 @@ public class CadCategoria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAcaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcaoActionPerformed
-        if (btnAcao.getText() == Constantes.BTN_SALVAR_TEXT)
+        DaoCategoria daoCategoria = new DaoCategoria();
+        
+        if (btnAcao.getText() == Constantes.BTN_SALVAR_TEXT){
             inserir();
-        else if (btnAcao.getText() == Constantes.BTN_ALTERAR_TEXT)
+            
+            tfId.setText(String.valueOf(daoCategoria.buscarProximoId()));
+            tfNome.setText("");
+            tfDescricao.setText("");
+        }
+        else if (btnAcao.getText() == Constantes.BTN_ALTERAR_TEXT){
             alterar();
+            ((ListCategoria) Formularios.listCategoria).listarTodos();
+            dispose();
+        }
     }//GEN-LAST:event_btnAcaoActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -179,55 +239,7 @@ public class CadCategoria extends javax.swing.JFrame {
         if(escolha == JOptionPane.YES_OPTION)
             excluir();
     }//GEN-LAST:event_btnExcluirActionPerformed
-    private void inserir(){
-        DaoCategoria daoCategoria = new DaoCategoria();
-        
-        if (daoCategoria.inserir(Integer.parseInt(tfId.getText()), tfNome.getText(), tfDescricao.getText())){
-            JOptionPane.showMessageDialog(null, "Categoria salva com sucesso!");
-            
-            tfId.setText("");
-            tfNome.setText("");
-            tfDescricao.setText("");
-        }else{
-            JOptionPane.showMessageDialog(null, "Não foi possível salvar a categoria!");
-        }
-    }
-        
-    private void alterar(){
-        DaoCategoria daoCategoria = new DaoCategoria();
-        
-        if (daoCategoria.alterar(Integer.parseInt(tfId.getText()), tfNome.getText(), tfDescricao.getText())){
-            JOptionPane.showMessageDialog(null, "Categoria alterada com sucesso!");
-            
-            tfId.setText("");
-            tfNome.setText("");
-            tfDescricao.setText("");
-        }else{
-            JOptionPane.showMessageDialog(null, "Não foi possível alterar a categoria!");
-        }
-        
-        ((ListCategoria) Formularios.listCategoria).listarTodos();
-        
-        dispose();
-    }
-            
-    private void excluir(){
-        DaoCategoria daoCategoria = new DaoCategoria();
-        
-        if (daoCategoria.excluir(Integer.parseInt(tfId.getText()))){
-            JOptionPane.showMessageDialog(null, "Categoria " + tfNome.getText() + " excluída com sucesso!");
-            
-            tfId.setText("");
-            tfNome.setText("");
-            tfDescricao.setText("");
-        }else{
-            JOptionPane.showMessageDialog(null, "Não foi possível excluir a categoria!");
-        }
-        
-        ((ListCategoria) Formularios.listCategoria).listarTodos();
-        
-        dispose();
-    }
+    
     /**
      * @param args the command line arguments
      */
