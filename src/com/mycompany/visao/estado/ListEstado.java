@@ -5,6 +5,7 @@
 package com.mycompany.visao.estado;
 
 import com.mycompany.dao.DaoEstado;
+import com.mycompany.dao.DaoPais;
 import com.mycompany.ferramentas.DadosTemporarios;
 import com.mycompany.modelo.ModEstado;
 import javax.swing.table.DefaultTableModel;
@@ -20,12 +21,14 @@ public class ListEstado extends javax.swing.JFrame {
      */
     public ListEstado() {
         initComponents();
-        
-        setLocationRelativeTo(null);
+
+    
+    setLocationRelativeTo(null);
         
         listarTodos();
+        
     }
-
+    
     public void listarTodos(){
         try{
             //Pega o model da tabela definido no design
@@ -41,10 +44,11 @@ public class ListEstado extends javax.swing.JFrame {
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
                 String id = resultSet.getString(1);
-                String nome = resultSet.getString(2);
-                String uf =  resultSet.getString(3);
-
-                defaultTableModel.addRow(new Object[]{id, nome, uf});
+                String pais = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                String uf =  resultSet.getString(4);
+                
+                defaultTableModel.addRow(new Object[]{id, pais, nome, uf});
             }
         }catch(Exception e){
             
@@ -65,14 +69,15 @@ public class ListEstado extends javax.swing.JFrame {
             
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
-    String id = resultSet.getString(1);
-                String nome = resultSet.getString(2);
-                String uf =  resultSet.getString(3);
-
-                defaultTableModel.addRow(new Object[]{id, nome, uf});
+                String id = resultSet.getString(1);
+                String pais = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                String uf = resultSet.getString(4);
+                
+                defaultTableModel.addRow(new Object[]{id, pais, nome, uf});
             }
         }catch(Exception e){
-            
+            System.out.println(e.getMessage());
         }
     }
     
@@ -91,16 +96,42 @@ public class ListEstado extends javax.swing.JFrame {
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
                 String id = resultSet.getString(1);
-                String nome = resultSet.getString(2);
-                String uf = resultSet.getString(3);
+                String pais = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                String uf = resultSet.getString(4);
                 
-                defaultTableModel.addRow(new Object[]{id, nome, uf});
-                
+                defaultTableModel.addRow(new Object[]{id, pais, nome, uf});
             }
         }catch(Exception e){
-            
+            System.out.println(e.getMessage());
         }
-    }        
+    }
+    
+    public void listarPorPais(String pPais){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
+            
+            tableEstado.setModel(defaultTableModel);
+
+            DaoEstado daoEstado = new DaoEstado();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoEstado.listarPorPais(pPais);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String pais = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                String uf = resultSet.getString(4);
+                
+                defaultTableModel.addRow(new Object[]{id, pais, nome, uf});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
     
     public void listarPorUf(String pUf){
         try{
@@ -117,14 +148,14 @@ public class ListEstado extends javax.swing.JFrame {
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
                 String id = resultSet.getString(1);
-                String nome = resultSet.getString(2);
-                String uf = resultSet.getString(3);
+                String pais = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                String uf = resultSet.getString(4);
                 
-                defaultTableModel.addRow(new Object[] {id, nome, uf});
-                
+                defaultTableModel.addRow(new Object[]{id, pais, nome, uf});
             }
-        }catch(Exception e) {
-            
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
                 
@@ -153,11 +184,11 @@ public class ListEstado extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "ESTADO", "UF"
+                "ID", "PAIS", "ESTADO", "UF"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -236,10 +267,19 @@ public class ListEstado extends javax.swing.JFrame {
             if (evt.getClickCount() == 2){
                 ModEstado modEstado = new ModEstado();
 
-                modEstado.setId(Integer.parseInt(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 0))));
-                modEstado.setNome(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 2)));
-                modEstado.setUf(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 3)));
+                modEstado.setid(Integer.parseInt(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 0))));
+                modEstado.setnome(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 2)));
+                modEstado.setuf(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 3)));
+                
+                DaoPais daoPais = new DaoPais();
+                ResultSet resultSet = daoPais.listarPorNome(String.valueOf(tableEstado.getValueAt(tableEstado.getSelectedRow(), 1)));
 
+                int pId_pais = -1;
+                while(resultSet.next())
+                    pId_pais = resultSet.getInt("ID");
+
+                modEstado.setid_pais(pId_pais);
+                
                 DadosTemporarios.tempObject = (ModEstado) modEstado;
 
                 CadEstado cadEstado = new CadEstado();
@@ -259,12 +299,15 @@ public class ListEstado extends javax.swing.JFrame {
                 listarPorId(Integer.parseInt(tfFiltro.getText()));
                 break;
             case 2:
-                listarPorNome(tfFiltro.getText());
+                listarPorPais(tfFiltro.getText());
                 break;
             case 3:
+                listarPorNome(tfFiltro.getText());
+                break;
+            case 4:
                 listarPorUf(tfFiltro.getText());
                 break;
-       }
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**

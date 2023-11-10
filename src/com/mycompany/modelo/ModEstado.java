@@ -10,46 +10,56 @@ package com.mycompany.modelo;
  */
 public class ModEstado {
     private int id;
+    private int id_pais;
     private String nome;
     private String uf;
     
-    public ModEstado(){
-        
-    }
-    
-    public ModEstado(int id, String nome, String uf) {
+    public ModEstado () {
+}
+
+public ModEstado(int id, int id_pais, String nome, String uf) {
         this.id = id;
+        this.id_pais = id_pais;
         this.nome = nome;
         this.uf = uf;
         
     }
     
-    public int getId(){
+    public int getid() {
         return id;
     }
     
-    public void setId(int id) {
+    public void setid(int id) {
         this.id = id;
     }
-
-    public String getNome(){
+    
+    public int getid_pais() {
+        return id_pais;
+    }
+    
+    public void setid_pais(int pId_pais) {
+        this.id_pais = id_pais;
+    }
+    
+    public String getnome(){
         return nome;
     }
     
-    public void setNome(String nome){
+    public void setnome(String nome) {
         this.nome = nome;
     }
     
-    public String getUf(){
-        return uf;
+    public String getuf() {
+       return uf;
     }
     
-    public void setUf(String uf){
+    public void setuf (String uf) {
         this.uf = uf;
     }
+    
 
     @Override
     public String toString() {
-        return "Estado{" + "id=" + id + ", nome=" + nome + ", uf=" + uf + '}';
+        return "ModEstado{" + "id=" + id + ", id_pais=" + id_pais + ", nome=" + nome + ", uf=" + uf + '}';
     }
 }

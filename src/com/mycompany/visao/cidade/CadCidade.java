@@ -20,6 +20,7 @@ import java.sql.ResultSet;
  */
 
     public class CadCidade extends javax.swing.JFrame {
+        
     public CadCidade () {
         initComponents();
         
@@ -127,13 +128,13 @@ import java.sql.ResultSet;
         }
     }
     
-    private void recuperaIdEstado(){
+    private void recuperaId_estado(){
         try{
             DaoEstado daoEstado = new DaoEstado();
-            ResultSet resultSet = daoEstado.listarPorNome(jcbEstado.getSelectedItem().toString(), false);
+            ResultSet resultSet = daoEstado.listarPorNome(jcbEstado.getSelectedItem().toString());
             
             resultSet.next();
-            tfIdEstado.setText(resultSet.getString("ID"));
+            tfId_estado.setText(resultSet.getString("ID"));
         }catch(Exception e){
             System.out.println(e.getMessage());            
         }
@@ -142,7 +143,7 @@ import java.sql.ResultSet;
     private void recuperaUfEstado(){
         try{
             DaoEstado daoEstado = new DaoEstado();
-            ResultSet resultSet = daoEstado.listarPorNome(jcbEstado.getSelectedItem().toString(), false);
+            ResultSet resultSet = daoEstado.listarPorNome(jcbEstado.getSelectedItem().toString());
             resultSet.next();
             tfUf.setText(resultSet.getString("UF"));
         }catch(Exception e){
@@ -171,7 +172,7 @@ import java.sql.ResultSet;
         jcbEstado = new javax.swing.JComboBox<>();
         tfId_estado = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tfUf = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -221,7 +222,7 @@ import java.sql.ResultSet;
                         .addGap(69, 69, 69)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(tfUf, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnAcao)
@@ -239,7 +240,7 @@ import java.sql.ResultSet;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -287,6 +288,14 @@ import java.sql.ResultSet;
             
             tfId.setText(String.valueOf(daoCidade.buscarProximoId()));
             tfId_estado.setText("");
+            
+           if(Formularios.cadCidade != null){
+                ((CadCidade) Formularios.cadCidade).carregarEstados();
+                dispose();
+            }if(Formularios.cadCidade != null){
+                ((CadCidade) Formularios.cadCidade).carregarEstados();
+                dispose();
+            }
             tfNome.setText("");
         }
         else if (btnAcao.getText() == Constantes.BTN_ALTERAR_TEXT){
@@ -297,7 +306,13 @@ import java.sql.ResultSet;
     }//GEN-LAST:event_btnAcaoActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
+        int escolha = 
+                JOptionPane.showConfirmDialog(
+                        null, 
+                        "Deseja realmente excluir a cidade " + tfNome.getText() + "?");
+        
+        if(escolha == JOptionPane.YES_OPTION)
+            excluir();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
@@ -349,10 +364,10 @@ class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox<String> jcbEstado;
     private javax.swing.JTextField tfId;
     private javax.swing.JTextField tfId_estado;
     private javax.swing.JTextField tfNome;
+    private javax.swing.JTextField tfUf;
     // End of variables declaration//GEN-END:variables
 }
