@@ -21,7 +21,7 @@ public class DaoCidade extends BancoDeDadosMySql{
     
     public Boolean inserir(int id, int id_estado, String nome){
         try{
-            sql= "INSERT INTO CIDADE (ID, ID_ESTADO, NOME) VALUES (?, ?, ?)";
+            sql= "INSERT INTO CIDADE ID, ID_ESTADO, NOME VALUES (?, ?, ?)";
             
             setStatement(getConexao().prepareStatement(sql));
             

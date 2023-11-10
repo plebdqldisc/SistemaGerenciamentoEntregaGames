@@ -24,6 +24,8 @@ import java.sql.ResultSet;
     public CadCidade () {
         initComponents();
         
+        carregarEstados();
+        
         if(!existeDadosTemporarios()){
             DaoCidade daoCidade = new DaoCidade();
 
@@ -38,24 +40,44 @@ import java.sql.ResultSet;
             btnExcluir.setVisible(true);
         }
         
-        
+        recuperaId_estado();
         
         setLocationRelativeTo(null);
         
         tfId.setEnabled(false);
+        
+        //tfId_estado.setVisible(false);
     }
     
     private Boolean existeDadosTemporarios(){        
-        if(DadosTemporarios.tempObject instanceof ModCidade){
+        if (DadosTemporarios.tempObject instanceof ModCidade){
             int id = ((ModCidade) DadosTemporarios.tempObject).getId();
+            int id_estado = ((ModCidade) DadosTemporarios.tempObject).getId_estado();
             String nome = ((ModCidade) DadosTemporarios.tempObject).getNome();
             
             
             tfId.setText(String.valueOf(id));
-            tfId_estado.setText(String.valueOf(id));
+            tfId_estado.setText(String.valueOf(id_estado));
             tfNome.setText(nome);
             
-        
+            //jcbEstado.setSelectedIndex(idEstado - 1);
+            //
+            try{
+                DaoEstado daoEstado = new DaoEstado();
+                ResultSet resultSet = daoEstado.listarPorId(id_estado);
+                resultSet.next();
+                String pais = resultSet.getString("ESTADO");
+                int index = 0;
+                for(int i = 0; i < jcbEstado.getItemCount(); i++){
+                    if(jcbEstado.getItemAt(i).equals(pais)){
+                        index = i;
+                        break;
+                    }
+                }
+                jcbEstado.setSelectedIndex(index);
+            }catch(Exception e){}
+            //
+            
             DadosTemporarios.tempObject = null;
             
             return true;
@@ -66,44 +88,41 @@ import java.sql.ResultSet;
     private void inserir(){
         DaoCidade daoCidade = new DaoCidade();
         
-        if (daoCidade.inserir(Integer.parseInt(tfId.getText()), (Integer.parseInt(tfId_estado.getText())), tfNome.getText())){
-            JOptionPane.showMessageDialog(null, "Categoria salva com sucesso!");
+        if (daoCidade.inserir(Integer.parseInt(tfId.getText()), Integer.parseInt(tfId_estado.getText()), tfNome.getText())){
+            JOptionPane.showMessageDialog(null, "Cidade salva com sucesso!");
             
             tfId.setText(String.valueOf(daoCidade.buscarProximoId()));
-            tfId_estado.setText("");
             tfNome.setText("");
-            
         }else{
-            JOptionPane.showMessageDialog(null, "Não foi possível salvar a categoria!");
+            JOptionPane.showMessageDialog(null, "Não foi possível salvar a cidade!");
         }
     }
-    
+        
     private void alterar(){
         DaoCidade daoCidade = new DaoCidade();
         
-        if (daoCidade.alterar(Integer.parseInt(tfId.getText()), (Integer.parseInt(tfId_estado.getText())), tfNome.getText())){
-            JOptionPane.showMessageDialog(null, "Categoria alterada com sucesso!");
+        if (daoCidade.alterar(Integer.parseInt(tfId.getText()), Integer.parseInt(tfId_estado.getText()), tfNome.getText())){
+            JOptionPane.showMessageDialog(null, "Cidade alterada com sucesso!");
             
             tfId.setText("");
             tfId_estado.setText("");
             tfNome.setText("");
         }else{
-            JOptionPane.showMessageDialog(null, "Não foi possível alterar a categoria!");
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar a cidade!");
         }
         
         ((ListCidade) Formularios.listCidade).listarTodos();
         
         dispose();
     }
-    
-    private void excluir(){
+            
+            private void excluir(){
         DaoCidade daoCidade = new DaoCidade();
         
         if (daoCidade.excluir(Integer.parseInt(tfId.getText()))){
-            JOptionPane.showMessageDialog(null, " Cidade " + tfNome.getText() + " excluída com sucesso!");
+            JOptionPane.showMessageDialog(null, "Cidade " + tfNome.getText() + " excluída com sucesso!");
             
             tfId.setText("");
-            tfId_estado.setText("");
             tfNome.setText("");
         }else{
             JOptionPane.showMessageDialog(null, "Não foi possível excluir a cidade!");
@@ -113,8 +132,8 @@ import java.sql.ResultSet;
         
         dispose();
     }
-    
-    public void carregarEstados(){
+
+            private void carregarEstados(){
         try{
             DaoEstado daoEstado = new DaoEstado();
 
@@ -196,7 +215,11 @@ import java.sql.ResultSet;
             }
         });
 
-        jcbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Parana" }));
+        jcbEstado.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbEstadoItemStateChanged(evt);
+            }
+        });
 
         jLabel5.setText("UF");
 
@@ -281,28 +304,10 @@ import java.sql.ResultSet;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAcaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcaoActionPerformed
-        DaoCidade daoCidade = new DaoCidade();
-        
-        if (btnAcao.getText() == Constantes.BTN_SALVAR_TEXT){
+        if (btnAcao.getText() == Constantes.BTN_SALVAR_TEXT)
             inserir();
-            
-            tfId.setText(String.valueOf(daoCidade.buscarProximoId()));
-            tfId_estado.setText("");
-            
-           if(Formularios.cadCidade != null){
-                ((CadCidade) Formularios.cadCidade).carregarEstados();
-                dispose();
-            }if(Formularios.cadCidade != null){
-                ((CadCidade) Formularios.cadCidade).carregarEstados();
-                dispose();
-            }
-            tfNome.setText("");
-        }
-        else if (btnAcao.getText() == Constantes.BTN_ALTERAR_TEXT){
+        else if (btnAcao.getText() == Constantes.BTN_ALTERAR_TEXT)
             alterar();
-            ((ListCidade) Formularios.listCidade).listarTodos();
-            dispose();
-        }
     }//GEN-LAST:event_btnAcaoActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -314,6 +319,11 @@ import java.sql.ResultSet;
         if(escolha == JOptionPane.YES_OPTION)
             excluir();
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void jcbEstadoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbEstadoItemStateChanged
+        recuperaId_estado();
+        recuperaUfEstado();
+    }//GEN-LAST:event_jcbEstadoItemStateChanged
 
     /**
      * @param args the command line arguments

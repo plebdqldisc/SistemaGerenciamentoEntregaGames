@@ -81,7 +81,7 @@ public class ListEstado extends javax.swing.JFrame {
         }
     }
     
-    public void listarPorNome(String pNome){
+    public void listarPorPais(String pPais){
         try{
             //Define o model da tabela.
             DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
@@ -91,7 +91,7 @@ public class ListEstado extends javax.swing.JFrame {
             DaoEstado daoEstado = new DaoEstado();
 
             //Atribui o resultset retornado a uma variável para ser usada.
-            ResultSet resultSet = daoEstado.listarPorNome(pNome);
+            ResultSet resultSet = daoEstado.listarPorPais(pPais);
             
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
@@ -107,7 +107,7 @@ public class ListEstado extends javax.swing.JFrame {
         }
     }
     
-    public void listarPorPais(String pPais){
+    public void listarPorNome(String pNome){
         try{
             //Define o model da tabela.
             DefaultTableModel defaultTableModel = (DefaultTableModel) tableEstado.getModel();
@@ -117,7 +117,7 @@ public class ListEstado extends javax.swing.JFrame {
             DaoEstado daoEstado = new DaoEstado();
 
             //Atribui o resultset retornado a uma variável para ser usada.
-            ResultSet resultSet = daoEstado.listarPorPais(pPais);
+            ResultSet resultSet = daoEstado.listarPorNome(pNome);
             
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
@@ -177,7 +177,7 @@ public class ListEstado extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "ESTADO", "UF" }));
+        jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "PAIS", "ESTADO", "UF" }));
 
         tableEstado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

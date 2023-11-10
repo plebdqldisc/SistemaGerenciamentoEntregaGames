@@ -77,31 +77,6 @@ public class ListCidade extends javax.swing.JFrame {
         }
     }
     
-    public void listarPorNome(String pNome){
-        try{
-            //Define o model da tabela.
-            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
-            
-            tableCidade.setModel(defaultTableModel);
-
-            DaoCidade daoCidade = new DaoCidade();
-
-            //Atribui o resultset retornado a uma variável para ser usada.
-            ResultSet resultSet = daoCidade.listarPorNome(pNome);
-            
-            defaultTableModel.setRowCount(0);
-            while (resultSet.next()){
-                String id = resultSet.getString(1);
-                String id_estado = resultSet.getString(2);
-                String nome = resultSet.getString(3);
-                
-                defaultTableModel.addRow(new Object[]{id, id_estado, nome});
-            }
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
-    
     public void listarPorId_estado(String Id_estado){
         try{
             //Define o model da tabela.
@@ -121,6 +96,31 @@ public class ListCidade extends javax.swing.JFrame {
                 String cidade = resultSet.getString(3);
                 
                 defaultTableModel.addRow(new Object[]{id, id_estado, cidade});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listarPorNome(String pNome){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
+            
+            tableCidade.setModel(defaultTableModel);
+
+            DaoCidade daoCidade = new DaoCidade();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoCidade.listarPorNome(pNome);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String id_estado = resultSet.getString(2);
+                String nome = resultSet.getString(3);
+                
+                defaultTableModel.addRow(new Object[]{id, id_estado, nome});
             }
         }catch(Exception e){
             System.out.println(e.getMessage());

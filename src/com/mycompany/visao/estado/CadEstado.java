@@ -44,7 +44,7 @@ public class CadEstado extends javax.swing.JFrame {
         
         setLocationRelativeTo(null);
         
-        tfId_pais.setVisible(false);
+        //tfId_pais.setVisible(false);
         
         tfId.setEnabled(false);
         
