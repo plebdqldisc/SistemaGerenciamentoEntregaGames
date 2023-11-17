@@ -78,7 +78,16 @@ public class DaoCidade extends BancoDeDadosMySql{
     
     public ResultSet listarTodos(){
         try{
-            sql = "SELECT ID, ID_ESTADO, NOME FROM CIDADE";
+            sql = 
+                " SELECT                    " +
+                "   CID.ID AS ID,           " +
+                "   EST.NOME AS ESTADO,     " +
+                "   CID.NOME AS CIDADE,     " +
+                "   EST.UF                  " +
+                " FROM                      " +
+                "   CIDADE CID              " +
+                " JOIN ESTADO EST ON        " +
+                "   EST.ID = CID.ID_ESTADO  " ;
             
             setStatement(getConexao().prepareStatement(sql));
             
@@ -90,21 +99,20 @@ public class DaoCidade extends BancoDeDadosMySql{
         return getResultado();
     }
     
-    
     public ResultSet listarPorId(int id){
         try{
             sql = 
-                  " SELECT                       "+ 
-                  "     CID.ID AS ID,            "+
-                  "     EST.NOME AS ESTADO,      "+
-                  "     CID.NOME AS CIDADE,      "+
-                  "     EST.UF                   "+
-                  " FROM                         "+
-                  "    CIDADE CID                "+
-                  " JOIN ESTADO EST ON           "+
-                  "     EST.ID = CID.ID_ESTADO   "+
-                  " WHERE                        "+
-                  "     CID.ID = ?               ";  
+                " SELECT                    " +
+                "   CID.ID AS ID,           " +
+                "   EST.NOME AS ESTADO,     " +
+                "   CID.NOME AS CIDADE,     " +
+                "   EST.UF                  " +
+                " FROM                      " +
+                "   CIDADE CID              " +
+                " JOIN ESTADO EST ON        " +
+                "   EST.ID = CID.ID_ESTADO  " +
+                " WHERE                     " +
+                "   CID.ID = ?              ";
             
             setStatement(getConexao().prepareStatement(sql));
             
@@ -116,25 +124,49 @@ public class DaoCidade extends BancoDeDadosMySql{
         }
         
         return getResultado();
-        
     }
     
-    public ResultSet listarPorNome (String nome){
+    public ResultSet listarPorEstado(String estado){
         try{
             sql = 
-                    
-                    
-                  " SELECT                       "+ 
-                  "     CID.ID AS ID,            "+
-                  "     EST.NOME AS ESTADO,      "+
-                  "     CID.NOME AS CIDADE,      "+
-                  "     EST.UF                   "+
-                  " FROM                         "+
-                  "    CIDADE CID                "+
-                  " JOIN ESTADO EST ON           "+
-                  "     EST.ID = CID.ID_ESTADO   "+
-                  " WHERE                        "+
-                  "     CID.NOME = ?             ";
+                " SELECT                    " +
+                "   CID.ID AS ID,           " +
+                "   EST.NOME AS ESTADO,     " +
+                "   CID.NOME AS CIDADE,     " +
+                "   EST.UF                  " +
+                " FROM                      " +
+                "   CIDADE CID              " +
+                " JOIN ESTADO EST ON        " +
+                "   EST.ID = CID.ID_ESTADO  " +
+                " WHERE                     " +
+                "   EST.NOME LIKE ?         ";
+            
+            setStatement(getConexao().prepareStatement(sql));
+            
+            getStatement().setString(1, estado + "%");
+            
+            setResultado(getStatement().executeQuery());
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return getResultado();
+    }
+    
+    public ResultSet listarPorNome(String nome){
+        try{
+            sql = 
+                " SELECT                    " +
+                "   CID.ID AS ID,           " +
+                "   EST.NOME AS ESTADO,     " +
+                "   CID.NOME AS CIDADE,     " +
+                "   EST.UF                  " +
+                " FROM                      " +
+                "   CIDADE CID              " +
+                " JOIN ESTADO EST ON        " +
+                "   EST.ID = CID.ID_ESTADO  " +
+                " WHERE                     " +
+                "   CID.NOME LIKE ?         ";
             
             setStatement(getConexao().prepareStatement(sql));
             
@@ -143,62 +175,29 @@ public class DaoCidade extends BancoDeDadosMySql{
             setResultado(getStatement().executeQuery());
         }catch(Exception e){
             System.out.println(e.getMessage());
-            
         }
         
         return getResultado();
-        
     }
     
-    public ResultSet listarPorId_estado (String Id_estado) {
+    public ResultSet listarPorUf(String Uf){
         try{
             sql = 
-                    
-                  " SELECT                       "+ 
-                  "     CID.ID AS ID,            "+
-                  "     EST.NOME AS ESTADO,      "+
-                  "     CID.NOME AS CIDADE,      "+
-                  "     EST.UF                   "+
-                  " FROM                         "+
-                  "    CIDADE CID                "+
-                  " JOIN ESTADO EST ON           "+
-                  "     EST.ID = CID.ID_ESTADO   "+
-                  " WHERE                        "+
-                  "     EST.NOME LIKE ?          ";
+                " SELECT                    " +
+                "   CID.ID AS ID,           " +
+                "   EST.NOME AS ESTADO,     " +
+                "   CID.NOME AS CIDADE,     " +
+                "   EST.UF                  " +
+                " FROM                      " +
+                "   CIDADE CID              " +
+                " JOIN ESTADO EST ON        " +
+                "   EST.ID = CID.ID_ESTADO  " +
+                " WHERE                     " +
+                "   EST.UF = ?              ";
             
             setStatement(getConexao().prepareStatement(sql));
             
-            getStatement().setString(1, Id_estado + "%");
-            
-            setResultado(getStatement().executeQuery());
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        
-        return getResultado();
-        
-    }
-    
-    
-    public ResultSet listarPorUf (String uf) {
-        try{
-            sql = 
-                    
-                  " SELECT                       "+ 
-                  "     CID.ID AS ID,            "+
-                  "     EST.NOME AS ESTADO,      "+
-                  "     CID.NOME AS CIDADE,      "+
-                  "     EST.UF                   "+
-                  " FROM                         "+
-                  "    CIDADE CID                "+
-                  " JOIN ESTADO EST ON           "+
-                  "     EST.ID = CID.ID_ESTADO   "+
-                  " WHERE                        "+
-                  "     EST.UF = ?               ";
-            
-            setStatement(getConexao().prepareStatement(sql));
-            
-            getStatement().setString(1, uf + "%");
+            getStatement().setString(1, Uf + "%");
             
             setResultado(getStatement().executeQuery());
         }catch(Exception e){

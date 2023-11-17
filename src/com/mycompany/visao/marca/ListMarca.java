@@ -4,6 +4,14 @@
  */
 package com.mycompany.visao.marca;
 
+import com.mycompany.dao.DaoMarca;
+import com.mycompany.ferramentas.DadosTemporarios;
+import com.mycompany.ferramentas.Formularios;
+import com.mycompany.modelo.ModMarca;
+import com.mycompany.modelo.ModPais;
+import com.mycompany.visao.pais.CadPais;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author arthur.7923
@@ -15,6 +23,82 @@ public class ListMarca extends javax.swing.JFrame {
      */
     public ListMarca() {
         initComponents();
+        
+        setLocationRelativeTo(null);
+        
+        listarTodos();
+    }
+
+    public void listarTodos(){
+        try{
+            //Pega o model da tabela definido no design
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableMarca.getModel();
+            
+            tableMarca.setModel(defaultTableModel);
+
+            DaoMarca daoMarca = new DaoMarca();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoMarca.listarTodos();
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                
+                defaultTableModel.addRow(new Object[]{id, nome});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listarPorId(int pId){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableMarca.getModel();
+
+            tableMarca.setModel(defaultTableModel);
+
+            DaoMarca daoMarca = new DaoMarca();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoMarca.listarPorId(pId);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                
+                defaultTableModel.addRow(new Object[]{id, nome});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listarPorNome(String pNome){
+        try{
+            //Define o model da tabela.
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableMarca.getModel();
+            
+            tableMarca.setModel(defaultTableModel);
+
+            DaoMarca daoMarca = new DaoMarca();
+
+            //Atribui o resultset retornado a uma variável para ser usada.
+            ResultSet resultSet = daoMarca.listarPorNome(pNome);
+            
+            defaultTableModel.setRowCount(0);
+            while (resultSet.next()){
+                String id = resultSet.getString(1);
+                String nome = resultSet.getString(2);
+                
+                defaultTableModel.addRow(new Object[]{id, nome});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -48,9 +132,14 @@ public class ListMarca extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
-        jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "MARCA", " " }));
+        jcbTipoFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TODOS", "ID", "NOME" }));
         jcbTipoFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbTipoFiltroActionPerformed(evt);
@@ -71,6 +160,11 @@ public class ListMarca extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tableMarca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMarcaMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tableMarca);
@@ -140,8 +234,46 @@ public class ListMarca extends javax.swing.JFrame {
     }//GEN-LAST:event_jcbTipoFiltroActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        switch (jcbTipoFiltro.getSelectedIndex()){
+            case 0:
+                listarTodos();
+                break;
+            case 1:
+                listarPorId(Integer.parseInt(tfFiltro.getText()));
+                break;
+            case 2:
+                listarPorNome(tfFiltro.getText());
+                break;
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void tableMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMarcaMouseClicked
+        if (evt.getClickCount() == 2){
+            ModMarca modMarca = new ModMarca();
+
+            modMarca.setId(Integer.parseInt(String.valueOf(tableMarca.getValueAt(tableMarca.getSelectedRow(), 0))));
+            modMarca.setNome(String.valueOf(tableMarca.getValueAt(tableMarca.getSelectedRow(), 1)));
+
+            DadosTemporarios.tempObject = (ModMarca) modMarca;
+
+            CadMarca cadMarca = new CadMarca();
+            cadMarca.setVisible(true);
+        }
+    }//GEN-LAST:event_tableMarcaMouseClicked
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        switch (jcbTipoFiltro.getSelectedIndex()){
+            case 0:
+                listarTodos();
+                break;
+            case 1:
+                listarPorId(Integer.parseInt(tfFiltro.getText()));
+                break;
+            case 2:
+                listarPorNome(tfFiltro.getText());
+                break;
+        }
+    }//GEN-LAST:event_formWindowClosed
 
     /**
      * @param args the command line arguments

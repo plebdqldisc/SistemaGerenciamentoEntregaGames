@@ -77,7 +77,7 @@ public class ListCidade extends javax.swing.JFrame {
         }
     }
     
-    public void listarPorId_estado(String Id_estado){
+    public void listarPorEstado(String pEstado){
         try{
             //Define o model da tabela.
             DefaultTableModel defaultTableModel = (DefaultTableModel) tableCidade.getModel();
@@ -87,15 +87,15 @@ public class ListCidade extends javax.swing.JFrame {
             DaoCidade DaoCidade = new DaoCidade();
 
             //Atribui o resultset retornado a uma variável para ser usada.
-            ResultSet resultSet = DaoCidade.listarPorId_estado(Id_estado);
+            ResultSet resultSet = DaoCidade.listarPorEstado(pEstado);
             
             defaultTableModel.setRowCount(0);
             while (resultSet.next()){
                 String id = resultSet.getString(1);
-                String id_estado = resultSet.getString(2);
+                String estado = resultSet.getString(2);
                 String cidade = resultSet.getString(3);
                 
-                defaultTableModel.addRow(new Object[]{id, id_estado, cidade});
+                defaultTableModel.addRow(new Object[]{id, estado, cidade});
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -239,7 +239,7 @@ public class ListCidade extends javax.swing.JFrame {
                 listarPorId(Integer.parseInt(tfFiltro.getText()));
                 break;
             case 2:
-                listarPorId_estado(tfFiltro.getText());
+                listarPorEstado(tfFiltro.getText());
                 break;
             case 3:
                 listarPorNome(tfFiltro.getText());

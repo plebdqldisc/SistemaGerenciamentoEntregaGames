@@ -10,8 +10,12 @@ import com.mycompany.visao.categoria.CadCategoria;
 import com.mycompany.visao.categoria.ListCategoria;
 import com.mycompany.visao.cidade.CadCidade;
 import com.mycompany.visao.cidade.ListCidade;
+import com.mycompany.visao.endereco.CadEndereco;
+import com.mycompany.visao.endereco.ListEndereco;
 import com.mycompany.visao.estado.CadEstado;
 import com.mycompany.visao.estado.ListEstado;
+import com.mycompany.visao.marca.CadMarca;
+import com.mycompany.visao.marca.ListMarca;
 import com.mycompany.visao.pais.CadPais;
 import com.mycompany.visao.pais.ListPais;
 import javax.swing.JOptionPane;
@@ -55,11 +59,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         miCadastroCidade = new javax.swing.JMenuItem();
         miCadastroEstado = new javax.swing.JMenuItem();
         miCadastroPais = new javax.swing.JMenuItem();
+        miCadastroMarca = new javax.swing.JMenuItem();
+        miCadastroEndereco = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         miConsultaCategoria = new javax.swing.JMenuItem();
         miConsultaCidade = new javax.swing.JMenuItem();
         miConsultaEstado = new javax.swing.JMenuItem();
         miConsultaPais = new javax.swing.JMenuItem();
+        miConsultaMarca = new javax.swing.JMenuItem();
+        miConsultaEndereco = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,6 +116,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(miCadastroPais);
 
+        miCadastroMarca.setText("Marca");
+        miCadastroMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCadastroMarcaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miCadastroMarca);
+
+        miCadastroEndereco.setText("Endereco");
+        miCadastroEndereco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCadastroEnderecoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miCadastroEndereco);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Consulta");
@@ -143,6 +167,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu2.add(miConsultaPais);
+
+        miConsultaMarca.setText("Marca");
+        miConsultaMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miConsultaMarcaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miConsultaMarca);
+
+        miConsultaEndereco.setText("Endereco");
+        miConsultaEndereco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miConsultaEnderecoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(miConsultaEndereco);
 
         jMenuBar1.add(jMenu2);
 
@@ -210,6 +250,30 @@ public class MenuPrincipal extends javax.swing.JFrame {
         Formularios.listPais.setVisible(true);
     }//GEN-LAST:event_miConsultaPaisActionPerformed
 
+    private void miCadastroMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadastroMarcaActionPerformed
+        if(Formularios.cadMarca == null)
+            Formularios.cadMarca = new CadMarca();
+         
+         Formularios.cadMarca.setVisible(true);
+    }//GEN-LAST:event_miCadastroMarcaActionPerformed
+
+    private void miCadastroEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadastroEnderecoActionPerformed
+        if(Formularios.cadEndereco == null)
+            Formularios.cadEndereco = new CadEndereco();
+         
+         Formularios.cadEndereco.setVisible(true);
+    }//GEN-LAST:event_miCadastroEnderecoActionPerformed
+
+    private void miConsultaMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miConsultaMarcaActionPerformed
+        Formularios.listMarca = new ListMarca();
+        Formularios.listMarca.setVisible(true);
+    }//GEN-LAST:event_miConsultaMarcaActionPerformed
+
+    private void miConsultaEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miConsultaEnderecoActionPerformed
+        Formularios.listEndereco = new ListEndereco();
+        Formularios.listEndereco.setVisible(true);
+    }//GEN-LAST:event_miConsultaEnderecoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -253,11 +317,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem miCadastroCategoria;
     private javax.swing.JMenuItem miCadastroCidade;
+    private javax.swing.JMenuItem miCadastroEndereco;
     private javax.swing.JMenuItem miCadastroEstado;
+    private javax.swing.JMenuItem miCadastroMarca;
     private javax.swing.JMenuItem miCadastroPais;
     private javax.swing.JMenuItem miConsultaCategoria;
     private javax.swing.JMenuItem miConsultaCidade;
+    private javax.swing.JMenuItem miConsultaEndereco;
     private javax.swing.JMenuItem miConsultaEstado;
+    private javax.swing.JMenuItem miConsultaMarca;
     private javax.swing.JMenuItem miConsultaPais;
     // End of variables declaration//GEN-END:variables
 }

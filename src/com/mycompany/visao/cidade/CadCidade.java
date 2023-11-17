@@ -155,7 +155,7 @@ import java.sql.ResultSet;
             resultSet.next();
             tfId_estado.setText(resultSet.getString("ID"));
         }catch(Exception e){
-            System.out.println(e.getMessage());            
+            JOptionPane.showMessageDialog(null, e.getMessage());            
         }
     }
     
